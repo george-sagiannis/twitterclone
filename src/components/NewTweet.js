@@ -1,26 +1,22 @@
 import { useState } from "react";
+import { connect } from "react-redux";
+import { handleAddTweet } from "../actions/tweets";
 
-const NewTweet = () => {
+const NewTweet = ({ dispatch, id }) => {
   const [text, setText] = useState("");
 
   const handleChange = (e) => {
     const text = e.target.value;
-
     setText(text);
   };
-
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    // todo: Add Tweet to store
-
-    console.log("New Tweet: ", text);
+    dispatch(handleAddTweet(text, id));
 
     setText("");
   };
-
   const tweetLeft = 280 - text.length;
-
   return (
     <div>
       <h3 className="center">Compose new Tweet</h3>
@@ -42,4 +38,4 @@ const NewTweet = () => {
   );
 };
 
-export default NewTweet;
+export default connect()(NewTweet);
