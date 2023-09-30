@@ -5,27 +5,32 @@ import {
   TiHeartOutline,
   TiHeartFullOutline,
 } from "react-icons/ti";
+import { handleToggleTweet } from "../actions/tweets";
 
 const Tweet = (props) => {
   const handleLike = (e) => {
     e.preventDefault();
 
     // TODO: Handle like Tweet
+    const { dispatch, tweet, authedUser } = props;
+
+    dispatch(
+      handleToggleTweet({
+        id: tweet.id,
+        hasLiked: tweet.hasLiked,
+        authedUser,
+      })
+    );
   };
 
   const toParent = (e, id) => {
     e.preventDefault();
-
-    // TODO: Redirect to parent Tweet
   };
-
   if (props.tweet === null) {
     return <p>This Tweet doesn't existd</p>;
   }
-
   const { name, avatar, timestamp, text, hasLiked, likes, replies, parent } =
     props.tweet;
-
   return (
     <div className="tweet">
       <img src={avatar} alt={`Avatar of ${name}`} className="avatar" />
@@ -59,11 +64,9 @@ const Tweet = (props) => {
     </div>
   );
 };
-
 const mapStateToProps = ({ authedUser, users, tweets }, { id }) => {
   const tweet = tweets[id];
   const parentTweet = tweet ? tweets[tweet.replyingTo] : null;
-
   return {
     authedUser,
     tweet: tweet
@@ -71,5 +74,4 @@ const mapStateToProps = ({ authedUser, users, tweets }, { id }) => {
       : null,
   };
 };
-
 export default connect(mapStateToProps)(Tweet);
